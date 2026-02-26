@@ -1,7 +1,7 @@
 import LandingPage from './Pages/LandingPage'
 import { Routes, Route } from 'react-router-dom'
 import Hvacform from './Pages/Hvacform'
-import PestControlForm from './Pages/PestControlform'
+import PestControlForm from './Pages/PestControlForm'
 import WaterDamageForm from './Pages/WaterDamageForm'
 import WindowsRepairForm from './Pages/WindowRepairForm'
 import Navbar from './Components/common/Navbar';

@@ -32,9 +32,9 @@ const LandingPage = () => {
       <section
       id="services"
       className="relative flex min-h-[70vh] items-center justify-center 
-      bg-[url('https://res.cloudinary.com/diicgo6ay/image/upload/v1772123513/futuristic-banner-background-with-wireframe-terrain-vector-896512442_x2eywn.jpg')] 
+      bg-[url('https://res.cloudinary.com/diicgo6ay/image/upload/v1772145928/E109YTF0_1_cji8th.jpg')] 
       bg-cover bg-fixed bg-center px-5 py-16 text-center 
-      before:absolute before:inset-0 before:bg-[linear-gradient(rgba(255,255,255,0.85),rgba(255,255,255,0.85))] before:z-[1]"
+      before:absolute before:inset-0 before:bg-[linear-gradient(rgba(255,255,255,0.50),rgba(255,255,255,0.50))] before:z-[1]"
     >
       <div className="z-[2] w-full max-w-[900px]">
         <h1 className="mt-18 sm:mt-7 text-3xl font-bold text-[#1a2a3a] md:text-5xl">

@@ -150,7 +150,7 @@ const WaterDamageForm = () => {
             />
             <label htmlFor="subscribe">
               By clicking Submit, I agree to the <Link to="/terms-of-service" className="text-[#0685B1] underline">Terms Of Service</Link> and 
-              <Link to="/privacy-policy" className="text-[#0685B1] underline"> Privacy Policy</Link> and authorize Water Damage Insurance Companies and their agents and marketing partners to contact me...
+              <Link to="/privacy-policy" className="text-[#0685B1] underline"> Privacy Policy</Link> and authorize Water Damage Insurance Companies and their agents and marketing partners to contact me about Water Damage Insurance and other non-insurance offers by telephone calls and text messages to the number I provided above. I agree to receive telemarketing calls and pre-recorded messages via an autodialed phone system, even if my telephone number is a mobile number that is currently listed on any state, federal or corporate “Do Not Call” list. I understand that I may revoke my consent at any time and that my consent is not a condition of purchase of any goods or services and that standard message and data rates may apply for California Residents.
             </label>
           </div>
 

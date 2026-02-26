@@ -7,8 +7,8 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 z-[999] flex h-[100px] w-full items-center justify-center border-b border-[#f0f0f0] bg-white font-['Inter',_sans-serif]">
-      <div className="flex w-full max-w-[1200px] items-center justify-between px-5">
+    <nav className="fixed top-0 z-[999] md:flex h-[100px] w-full items-center justify-center border-b border-[#f0f0f0] bg-white font-['Inter',_sans-serif]">
+      <div className="flex w-full max-w-[1200px] items-center justify-between px-5 ">
         
         {/* Logo Section */}
         <div className="flex h-[100px] w-[400px] cursor-pointer items-center justify-center text-[1.5rem] font-bold text-[#2c3e50]">
@@ -50,13 +50,24 @@ const Navbar = () => {
 
       {/* Phone Number Section - Hidden on mobile, flex on md+ */}
       <div className="hidden flex-col items-center justify-start md:flex">
-        <h5 className="m-0 p-0 text-sm font-medium">Licensed Service Provider</h5>
+        <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>
         <a 
-          href="tel:+1(877)321-XXXX" 
-          className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1]"
+          href="tel:+18886480831" 
+          className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-medium"
         >
-          +1(877)321-XXXX
+          +1(888)6480831
         </a>
+      </div>
+      <div className='md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
+          <div className='text-center mt-7'>
+            <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>
+        <a 
+          href="tel:+18886480831" 
+          className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-medium"
+        >
+          +1(888)6480831
+        </a>
+          </div>
       </div>
     </nav>
   );

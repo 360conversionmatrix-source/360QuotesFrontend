@@ -77,9 +77,24 @@ const PestControlForm = () => {
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
       {/* Header */}
-      <header className="pt-16 text-center">
-        <h1 className="text-4xl font-bold text-[#0685B1] mt-[50px]">Pest Control</h1>
-      </header>
+      <header className="relative pt-50 md:pt-24 text-center">
+  <img 
+    src="https://res.cloudinary.com/diicgo6ay/image/upload/v1772142550/E1032YVG_1_gxikwg.jpg" 
+    alt="Pest Control Service"
+    className="w-full h-[300px] sm:h-[600px] object-cover object-top rounded-lg shadow-md z-0"
+  />
+
+  {/* Dark overlay */}
+  <div className="absolute inset-0 bg-black opacity-50 z-2"></div>
+
+  {/* Text content */}
+  <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+    <h1 className="text-3xl pt-32 md:pt-7 md:text-7xl font-bold text-white">Pest Control</h1>
+    <h1 className="sm:mt-4  text-xl sm:text-3xl text-white">
+      <span className="text-[#0685B1] font-bold">Call</span> - Pest Control
+    </h1>
+  </div>
+</header>
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-6 py-8">

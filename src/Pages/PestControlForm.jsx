@@ -76,6 +76,17 @@ const PestControlForm = () => {
 
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
+      <div className='absolute z-9999 md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
+          <div className='text-center mt-7'>
+            <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>
+        <a 
+          href="tel:+18886480831" 
+          className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-medium"
+        >
+          +1(888)6480831
+        </a>
+          </div>
+      </div>
       {/* Header */}
       <header className="relative pt-50 md:pt-24 text-center">
   <img 

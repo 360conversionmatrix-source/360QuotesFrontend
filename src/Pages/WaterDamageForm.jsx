@@ -44,11 +44,18 @@ const WaterDamageForm = () => {
     setIsSubmitting(true);
     setStatus({ type: '', message: '' });
 
+    // Grab TrustedForm hidden field value before sending
+    const certField = document.getElementById("xxTrustedFormCertUrl");
+    const certUrl = certField ? certField.value : "";
+
     try {
       const response = await fetch("https://three60quotesbackend.onrender.com/waterDamage/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          xxTrustedFormCertUrl: certUrl, // include TrustedForm value
+        }),
       });
 
       if (response.ok) {
@@ -56,7 +63,7 @@ const WaterDamageForm = () => {
         // Reset form after successful submission
         setFormData({
           first_name: '', last_name: '', Address: '', City: '',
-          reason: '', zipcode: '', phone: '', email: '', subscribe: false
+          reason: '', zipcode: '', phone: '', email: '', subscribe: false,
         });
       } else {
         setStatus({ type: 'error', message: 'Failed to submit form.' });
@@ -78,7 +85,9 @@ const WaterDamageForm = () => {
       {/* Main Form Section */}
       <main className="max-w-4xl mx-auto px-6 py-8">
         <form onSubmit={handleSubmit} className="space-y-4">
-          
+          {/* Hidden TrustedForm field */}
+          <input type="hidden" name="xxTrustedFormCertUrl" id="xxTrustedFormCertUrl" />
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input 
               type="text" name="first_name" required placeholder="First Name" 
@@ -141,7 +150,7 @@ const WaterDamageForm = () => {
             />
             <label htmlFor="subscribe">
               By clicking Submit, I agree to the <Link to="/terms-of-service" className="text-[#0685B1] underline">Terms Of Service</Link> and 
-              <Link to="/privacy-policy" className="text-[#0685B1] underline"> Privacy Policy</Link> and authorize Water Damage Insurance Companies and their agents and marketing partners to contact me about Water Damage Insurance and other non-insurance offers by telephone calls and text messages to the number I provided above. I agree to receive telemarketing calls and pre-recorded messages via an autodialed phone system, even if my telephone number is a mobile number that is currently listed on any state, federal or corporate “Do Not Call” list. I understand that I may revoke my consent at any time and that my consent is not a condition of purchase of any goods or services and that standard message and data rates may apply for California Residents.
+              <Link to="/privacy-policy" className="text-[#0685B1] underline"> Privacy Policy</Link> and authorize Water Damage Insurance Companies and their agents and marketing partners to contact me...
             </label>
           </div>
 

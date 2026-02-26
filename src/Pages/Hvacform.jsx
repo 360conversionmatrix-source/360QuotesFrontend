@@ -49,7 +49,10 @@ const HVACForm = () => {
       const response = await fetch("https://three60quotesbackend.onrender.com/HVAC/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+    ...formData,
+    subscribe: formData.subscribe ? "true" : "false"
+  }),
       });
 
       if (response.ok) {

@@ -12,6 +12,7 @@ const HVACForm = () => {
     phone: '',
     email: '',
     subscribe: false,
+    xxTrustedFormCertUrl: '' // <-- add this field
   });
 
   const [status, setStatus] = useState({ type: '', message: '' });
@@ -27,7 +28,6 @@ const HVACForm = () => {
     s.parentNode.insertBefore(script, s);
 
     return () => {
-      // Clean up script if needed when component unmounts
       if (script.parentNode) script.parentNode.removeChild(script);
     };
   }, []);
@@ -45,19 +45,26 @@ const HVACForm = () => {
     setIsSubmitting(true);
     setStatus({ type: '', message: '' });
 
+    // Grab TrustedForm hidden field value before sending
+    const certField = document.querySelector("input[name='xxTrustedFormCertUrl']");
+    const certUrl = certField ? certField.value : '';
+
     try {
       const response = await fetch("https://three60quotesbackend.onrender.com/HVAC/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          xxTrustedFormCertUrl: certUrl // <-- include TrustedForm value
+        }),
       });
 
       if (response.ok) {
         setStatus({ type: 'success', message: 'Form submitted successfully!' });
-        // Optional: Reset form
         setFormData({
           first_name: '', last_name: '', Address: '', City: '',
-          reason: '', zipcode: '', phone: '', email: '', subscribe: false
+          reason: '', zipcode: '', phone: '', email: '', subscribe: false,
+          xxTrustedFormCertUrl: ''
         });
       } else {
         setStatus({ type: 'error', message: 'Failed to submit form.' });
@@ -71,94 +78,19 @@ const HVACForm = () => {
 
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
-      {/* Header Section */}
       <header className="pt-16 text-center">
         <h1 className="text-4xl font-bold text-[#0685B1] mt-[50px]">HVAC</h1>
       </header>
 
       <main className="max-w-4xl mx-auto px-6 py-8">
         <form onSubmit={handleSubmit} className="space-y-4">
-          
-          {/* Form Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input 
-              type="text" name="first_name" required placeholder="First Name" 
-              value={formData.first_name} onChange={handleChange}
-              className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
-            />
-            
-            <input 
-              type="text" name="last_name" required placeholder="Last Name" 
-              value={formData.last_name} onChange={handleChange}
-              className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
-            />
+          {/* Hidden TrustedForm field */}
+          <input type="hidden" name="xxTrustedFormCertUrl" />
 
-            <input 
-              type="text" name="Address" required placeholder="Address" 
-              value={formData.Address} onChange={handleChange}
-              className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
-            />
-
-            <input 
-              type="text" name="City" required placeholder="City" 
-              value={formData.City} onChange={handleChange}
-              className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
-            />
-
-            <select 
-              name="reason" value={formData.reason} onChange={handleChange}
-              className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent bg-white"
-            >
-              <option value="">Select State</option>
-              <option value="California">California</option>
-              <option value="usa">USA</option>
-            </select>
-
-            <input 
-              type="text" name="zipcode" pattern="^\d{5}(-\d{4})?$" required placeholder="Zip Code" 
-              value={formData.zipcode} onChange={handleChange}
-              className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
-            />
-
-            <input 
-              type="tel" name="phone" pattern="[0-9+\-() ]{7,}" placeholder="Phone Number" 
-              value={formData.phone} onChange={handleChange}
-              className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
-            />
-
-            <input 
-              type="email" name="email" required placeholder="E-mail" 
-              value={formData.email} onChange={handleChange}
-              className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
-            />
-          </div>
-
-          {/* Consent Section */}
-          <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
-            <input 
-              type="checkbox" id="subscribe" name="subscribe" 
-              checked={formData.subscribe} onChange={handleChange}
-              className="mt-1 h-4 w-4 rounded border-gray-300 text-[#0685B1] focus:ring-[#0685B1]"
-            />
-            <label htmlFor="subscribe">
-              By clicking Submit, I agree to the <Link to="/terms" className="text-[#0685B1] underline">Terms Of Service</Link> and 
-              <Link to="/privacy" className="text-[#0685B1] underline"> Privacy Policy</Link> and authorize HVAC Companies their agents and marketing partners to contact me about HVAC and other non-insurance offers by telephone calls and text messages to the number I provided above. I agree to receive telemarketing calls and pre-recorded messages via an autodialed phone system, even if my telephone number is a mobile number that is currently listed on any state, federal or corporate “Do Not Call” list. I understand that I may revoke my consent at any time and that my consent is not a condition of purchase of any goods or services and that standard message and data rates may apply for California Residents.
-            </label>
-          </div>
-
-          {/* Submit Button */}
-          <div className="pt-4">
-            <button 
-              type="submit" 
-              disabled={isSubmitting}
-              className={`w-full bg-[#0685B1] hover:bg-[#056a8c] text-white font-bold py-4 rounded transition-colors text-xl ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
-            >
-              {isSubmitting ? 'Submitting...' : 'Submit'}
-            </button>
-          </div>
+          {/* Your existing inputs... */}
+          {/* ... */}
         </form>
 
-        {/* Result Message */}
         {status.message && (
           <div className={`mt-4 text-center font-medium ${status.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
             {status.message}
@@ -166,7 +98,6 @@ const HVACForm = () => {
         )}
       </main>
 
-      {/* NoScript for TrustedForm */}
       <noscript>
         <img src='https://api.trustedform.com/ns.gif' alt="trustedform" />
       </noscript>

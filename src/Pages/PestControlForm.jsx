@@ -40,39 +40,48 @@ const PestControlForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setStatus({ type: '', message: '' });
+  e.preventDefault();
+  setIsSubmitting(true);
+  setStatus({ type: '', message: '' });
 
-    // Grab TrustedForm hidden field value before sending
-    const certField = document.getElementById("xxTrustedFormCertUrl");
-    const certUrl = certField ? certField.value : "";
+  // Grab TrustedForm hidden field value before sending
+  const certField = document.getElementById("xxTrustedFormCertUrl");
+  const certUrl = certField ? certField.value : "";
 
-    try {
-      const response = await fetch("https://three60quotesbackend.onrender.com/pestControl/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          xxTrustedFormCertUrl: certUrl, // include TrustedForm value
-        }),
+  try {
+    const response = await fetch("https://three60quotesbackend.onrender.com/pestControl/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...formData,
+        xxTrustedFormCertUrl: certUrl, // include TrustedForm value
+      }),
+    });
+
+    if (response.ok) {
+      setStatus({ type: 'success', message: 'Form submitted successfully!' });
+      setFormData({
+        first_name: '', last_name: '', Address: '', City: '',
+        reason: '', zipcode: '', phone: '', email: '', subscribe: false,
       });
 
-      if (response.ok) {
-        setStatus({ type: 'success', message: 'Form submitted successfully!' });
-        setFormData({
-          first_name: '', last_name: '', Address: '', City: '',
-          reason: '', zipcode: '', phone: '', email: '', subscribe: false,
+      // ✅ Fire Google Ads conversion event here
+      if (window.gtag) {
+        window.gtag('event', 'conversion', {
+          send_to: 'AW-17979286877/twiFCKipy_8bEN3KmP1C',
+          value: 1.0,
+          currency: 'INR'
         });
-      } else {
-        setStatus({ type: 'error', message: 'Failed to submit form.' });
       }
-    } catch (error) {
-      setStatus({ type: 'error', message: 'Error connecting to server.' });
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      setStatus({ type: 'error', message: 'Failed to submit form.' });
     }
-  };
+  } catch (error) {
+    setStatus({ type: 'error', message: 'Error connecting to server.' });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">

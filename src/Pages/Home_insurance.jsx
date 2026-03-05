@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const WaterDamageForm = () => {
+const PestControlForm = () => {
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -17,7 +17,7 @@ const WaterDamageForm = () => {
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // TrustedForm Script Injection
+  // TrustedForm Script Integration
   useEffect(() => {
     const script = document.createElement('script');
     script.type = 'text/javascript';
@@ -40,49 +40,83 @@ const WaterDamageForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setStatus({ type: '', message: '' });
+  e.preventDefault();
+  setIsSubmitting(true);
+  setStatus({ type: '', message: '' });
 
-    // Grab TrustedForm hidden field value before sending
-    const certField = document.getElementById("xxTrustedFormCertUrl");
-    const certUrl = certField ? certField.value : "";
+  // Grab TrustedForm hidden field value before sending
+  const certField = document.getElementById("xxTrustedFormCertUrl");
+  const certUrl = certField ? certField.value : "";
 
-    try {
-      const response = await fetch("https://three60quotesbackend.onrender.com/waterDamage/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          xxTrustedFormCertUrl: certUrl, // include TrustedForm value
-        }),
+  try {
+    const response = await fetch("https://three60quotesbackend.onrender.com/Homeinsurance/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...formData,
+        xxTrustedFormCertUrl: certUrl, // include TrustedForm value
+      }),
+    });
+
+    if (response.ok) {
+      setStatus({ type: 'success', message: 'Form submitted successfully!' });
+      setFormData({
+        first_name: '', last_name: '', Address: '', City: '',
+        reason: '', zipcode: '', phone: '', email: '', subscribe: false,
       });
 
-      if (response.ok) {
-        setStatus({ type: 'success', message: 'Form submitted successfully!' });
-        // Reset form after successful submission
-        setFormData({
-          first_name: '', last_name: '', Address: '', City: '',
-          reason: '', zipcode: '', phone: '', email: '', subscribe: false,
+      // ✅ Fire Google Ads conversion event here
+      if (window.gtag) {
+        window.gtag('event', 'conversion', {
+          send_to: 'AW-17979286877/twiFCKipy_8bEN3KmP1C',
+          value: 1.0,
+          currency: 'INR'
         });
-      } else {
-        setStatus({ type: 'error', message: 'Failed to submit form.' });
       }
-    } catch (error) {
-      setStatus({ type: 'error', message: 'Error connecting to server.' });
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      setStatus({ type: 'error', message: 'Failed to submit form.' });
     }
-  };
+  } catch (error) {
+    setStatus({ type: 'error', message: 'Error connecting to server.' });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
-      {/* Header Section */}
-      <header className="pt-16 text-center">
-        <h1 className="text-4xl font-bold text-[#0685B1] mt-[50px]">Water Damage</h1>
-      </header>
+      <div className='absolute z-9999 md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
+          <div className='text-center mt-7'>
+            <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>
+        <a 
+          href="tel:+18886480831" 
+          className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-medium"
+        >
+          +1(888)6480831
+        </a>
+          </div>
+      </div>
+      {/* Header */}
+      <header className="relative pt-50 md:pt-24 text-center">
+  <img 
+    src="https://res.cloudinary.com/diicgo6ay/image/upload/v1772742560/homeinsurance_d8wufv.jpg" 
+    alt="Home Insurance Service"
+    className="w-full h-[300px] sm:h-[600px] object-cover object-top rounded-lg shadow-md z-0"
+  />
 
-      {/* Main Form Section */}
+  {/* Dark overlay */}
+  <div className="absolute inset-0 bg-black opacity-50 z-2"></div>
+
+  {/* Text content */}
+  <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+    <h1 className="text-3xl pt-32 md:pt-7 md:text-7xl font-bold text-white">Home Insurance</h1>
+    <h1 className="sm:mt-4  text-xl sm:text-3xl text-white">
+      <span className="text-[#0685B1] font-bold">Call</span> - Home Insurance
+    </h1>
+  </div>
+</header>
+
+      {/* Main Content */}
       <main className="max-w-4xl mx-auto px-6 py-8">
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Hidden TrustedForm field */}
@@ -118,7 +152,7 @@ const WaterDamageForm = () => {
               className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent bg-white"
             >
               <option value="">Select State</option>
-               <option value="Alabama">Alabama</option>
+              <option value="Alabama">Alabama</option>
               <option value="Alaska">Alaska</option>
               <option value="Arizona">Arizona</option>
               <option value="Arkansas">Arkansas</option>
@@ -189,7 +223,7 @@ const WaterDamageForm = () => {
             />
           </div>
 
-          {/* Legal/Consent Disclosure */}
+          {/* Compliance Text */}
           <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
             <input 
               type="checkbox" id="subscribe" name="subscribe" 
@@ -197,8 +231,12 @@ const WaterDamageForm = () => {
               className="mt-1 h-4 w-4 rounded border-gray-300 text-[#0685B1] focus:ring-[#0685B1]"
             />
             <label htmlFor="subscribe">
-              By clicking Submit, I agree to the <Link to="/terms-of-service" className="text-[#0685B1] underline">Terms Of Service</Link> and 
-              <Link to="/privacy-policy" className="text-[#0685B1] underline"> Privacy Policy</Link> and authorize Water Damage Insurance Companies and their agents and marketing partners to contact me about Water Damage Insurance and other non-insurance offers by telephone calls and text messages to the number I provided above. I agree to receive telemarketing calls and pre-recorded messages via an autodialed phone system, even if my telephone number is a mobile number that is currently listed on any state, federal or corporate “Do Not Call” list. I understand that I may revoke my consent at any time and that my consent is not a condition of purchase of any goods or services and that standard message and data rates may apply for California Residents.
+              By clicking Submit, I agree to the <Link to="/terms" className="text-[#0685B1] underline">Terms Of Service</Link> and 
+              <Link to="/privacy" className="text-[#0685B1] underline"> Privacy Policy</Link> and authorize Home Insurance Companies and their agents and marketing 
+          partners to contact me about Home Insurance and other non-insurance offers by telephone calls and text messages to the number I provided 
+          above. I agree to receive telemarketing calls and pre-recorded messages via an autodialed phone system, even if my telephone number is a 
+          mobile number that is currently listed on any state, federal or corporate “Do Not Call” list. I understand that I may revoke my consent at any time 
+          and that my consent is not a condition of purchase of any goods or services and that standard message and data rates may apply for California Residents.
             </label>
           </div>
 
@@ -213,7 +251,6 @@ const WaterDamageForm = () => {
           </div>
         </form>
 
-        {/* Status Messages */}
         {status.message && (
           <div className={`mt-4 text-center font-medium ${status.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
             {status.message}
@@ -228,4 +265,4 @@ const WaterDamageForm = () => {
   );
 };
 
-export default WaterDamageForm;
+export default PestControlForm;

@@ -14,7 +14,7 @@ const LandingPage = () => {
     { title: "HVAC (Heating & Air Conditioning)", icon: "fa-fan", link: "/Hvacform" },
     { title: "Pest Control", icon: "fa-bug", link: "/Pest_control" },
     { title: "Windows & Doors", icon: "fa-door-open", link: "/Windows_doors" },
-    { title: "Home Insurance", icon: "fa-droplet", link: "/Home_insurance" },
+    { title: "Home Insurance", icon: "fa-home", link: "/Home_insurance" },
   ];
 
   const faqs = [

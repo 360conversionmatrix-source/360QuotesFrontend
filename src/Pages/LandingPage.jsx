@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import img from '../../public/compare-image.png';
+import Navbar from '../Components/common/Navbar';
 
 
 const LandingPage = () => {
@@ -26,6 +27,7 @@ const LandingPage = () => {
 
   return (
     <div className="font-['Inter',_sans-serif] text-[#2c3e50]">
+      <Navbar number="+1(888)XXX-XXXX" />
        
       
       {/* --- HERO & SERVICES SECTION --- */}

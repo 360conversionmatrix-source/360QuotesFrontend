@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
+import Navbar from '../Components/common/Navbar';
 const HVACForm = () => {
   const [formData, setFormData] = useState({
     first_name: '',
@@ -76,6 +76,7 @@ const HVACForm = () => {
 
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
+      <Navbar number="+1(888)XXX-XXXX" />
       {/* Header Section */}
       <header className="pt-16 text-center">
         <h1 className="text-4xl font-bold text-[#0685B1] mt-[50px]">HVAC</h1>

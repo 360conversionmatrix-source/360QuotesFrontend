@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '../Components/common/Navbar';
 
 const PestControlForm = () => {
   const [formData, setFormData] = useState({
@@ -85,6 +86,7 @@ const PestControlForm = () => {
 
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
+      <Navbar number="+1(888)XXX-XXXX" />
       <div className='absolute z-9999 md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
           <div className='text-center mt-7'>
             <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>

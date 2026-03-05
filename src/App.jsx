@@ -11,7 +11,7 @@ function App() {
   return (
     <div>
        {/* --- NAVBAR --- */}
-    <Navbar/>
+    
 
 
       {/* Routing--> */}

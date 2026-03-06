@@ -34,7 +34,7 @@ const LandingPage = () => {
       <section
       id="services"
       className="relative flex min-h-[70vh] items-center justify-center 
-      bg-[url('https://res.cloudinary.com/diicgo6ay/image/upload/v1772145928/E109YTF0_1_cji8th.jpg')] 
+      bg-[url('https://res.cloudinary.com/diicgo6ay/image/upload/v1772812473/E109YTF0_1_cji8th_dt9itd.jpg')] 
       bg-cover bg-fixed bg-center px-5 py-16 text-center 
       before:absolute before:inset-0 before:bg-[linear-gradient(rgba(255,255,255,0.50),rgba(255,255,255,0.50))] before:z-[1]"
     >

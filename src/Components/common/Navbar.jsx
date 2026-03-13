@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import img from '../../../public/Tab_logo.png';
 
-const Navbar = ({ number }) => {
+const Navbar = ({ number,number2 }) => {
   // State for mobile menu toggle (functionality preserved)
   const [isOpen, setIsOpen] = useState(false);
 
@@ -51,12 +51,20 @@ const Navbar = ({ number }) => {
       {/* Phone Number Section - Hidden on mobile, flex on md+ */}
       <div className="hidden flex-col items-center justify-start md:flex">
         <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>
-        <a 
+        <div>
+          <a 
           href={`tel:${number}`} 
-          className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-medium"
+          className="m-0 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-bold"
         >
-          {number}
+          {number}/
         </a>
+         <a 
+          href={`tel:${number2}`} 
+          className="m-0 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-bold"
+        >
+          {number2}
+        </a>
+        </div>
       </div>
     </nav>
   );

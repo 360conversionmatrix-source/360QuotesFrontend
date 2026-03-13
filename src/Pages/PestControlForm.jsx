@@ -86,7 +86,7 @@ const PestControlForm = () => {
 
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
-      <Navbar number="+1(888)6480831" />
+      <Navbar number="+1(888)6480831" number2="8884793353" />
       <div className='absolute z-9999 md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
           <div className='text-center mt-7'>
             <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>

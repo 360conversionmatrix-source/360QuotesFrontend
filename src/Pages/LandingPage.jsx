@@ -14,7 +14,7 @@ const LandingPage = () => {
   const services = [
     { title: "HVAC (Heating & Air Conditioning)", icon: "fa-fan", link: "/Hvacform" },
     { title: "Pest Control", icon: "fa-bug", link: "/Pest_control" },
-    { title: "Windows & Doors", icon: "fa-door-open", link: "/Windows_doors" },
+    { title: "Auto Insurance", icon: "fa-car", link: "/Car" },
     { title: "Home Insurance", icon: "fa-home", link: "/Home_insurance" },
   ];
 

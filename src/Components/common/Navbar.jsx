@@ -50,21 +50,25 @@ const Navbar = ({ number,number2 }) => {
 
       {/* Phone Number Section - Hidden on mobile, flex on md+ */}
       <div className="hidden flex-col items-center justify-start md:flex">
-        <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>
-        <div>
-          <a 
-          href={`tel:${number}`} 
-          className="m-0 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-bold"
-        >
-          {number}/
-        </a>
-         <a 
-          href={`tel:${number2}`} 
-          className="m-0 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-bold"
-        >
-          {number2}
-        </a>
-        </div>
+         
+
+      <button className="relative flex rounded-full items-center gap-3 bg-[#0685B1] cursor-pointer hover:bg-[#066483] text-white font-semibold px-6 py-3  shadow-md transition duration-300 animate-[heartbeat_1.5s_ease-in-out_infinite]">
+        {/* Headset Icon */}
+        <span className="absolute inset-0 m-auto w-42 h-14 rounded-full bg-[#0685B1] animate-ping" />
+        <svg xmlns="http://www.w3.org/2000/svg" 
+             fill="none" viewBox="0 0 24 24" 
+             strokeWidth={1.5} stroke="currentColor" 
+             className="w-6 h-6">
+          <path strokeLinecap="round" strokeLinejoin="round" 
+                d="M12 1.5a9 9 0 00-9 9v3a3 3 0 003 3h1.5v-6H6a7.5 7.5 0 0115 0h-1.5v6H18a3 3 0 003-3v-3a9 9 0 00-9-9z" />
+        </svg>
+
+        {/* Text */}
+        <span className="flex flex-col text-left">
+          <span className="text-sm">Call us 24/7 for Support</span>
+          <span className="text-lg font-bold">{number}</span>
+        </span>
+      </button>
       </div>
     </nav>
   );

@@ -94,7 +94,7 @@ const PestControlForm = () => {
           href="tel:+18886480831" 
           className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-medium"
         >
-          +1(888)6480831
+          +1(888)XXXXXXXX
         </a>
           </div>
       </div>
@@ -113,7 +113,7 @@ const PestControlForm = () => {
   <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
     <h1 className="text-3xl pt-32 md:pt-7 md:text-7xl font-bold text-white">Home Insurance</h1>
     <h1 className="sm:mt-4  text-xl sm:text-3xl text-white">
-      <span className="text-[#0685B1] font-bold">Call</span> - Home Insurance
+       Get a Free Quotes Today Without any Down Payment
     </h1>
   </div>
 </header>

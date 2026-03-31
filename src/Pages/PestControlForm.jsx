@@ -13,13 +13,13 @@ const PestControlForm = () => {
     phone: '',
     email: '',
     subscribe: false,
-    smid: '', // Added to handle URL parameter
+    smid: '', // State to hold the captured or generated ID
   });
 
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // TrustedForm & URL Params Integration
+  // TrustedForm & SMID Generation Integration
   useEffect(() => {
     // 1. TrustedForm Script Integration
     const script = document.createElement('script');
@@ -29,12 +29,16 @@ const PestControlForm = () => {
     const s = document.getElementsByTagName('script')[0];
     if (s) s.parentNode.insertBefore(script, s);
 
-    // 2. Extract smid from URL (The logic you requested)
+    // 2. SMID Logic: Try URL first, otherwise Generate Randomly
     const urlParams = new URLSearchParams(window.location.search);
-    const smidValue = urlParams.get("smid");
-    if (smidValue) {
-      setFormData(prev => ({ ...prev, smid: smidValue }));
+    let smidValue = urlParams.get("smid");
+
+    if (!smidValue) {
+      // Generates a random unique ID prefixed with "RAND-" (e.g., RAND-K92JS81L)
+      smidValue = 'RAND-' + Math.random().toString(36).substring(2, 11).toUpperCase();
     }
+
+    setFormData(prev => ({ ...prev, smid: smidValue }));
 
     return () => {
       if (script.parentNode) script.parentNode.removeChild(script);
@@ -64,12 +68,15 @@ const PestControlForm = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          smid: formData.smid,       // Explicitly ensure the generated/captured ID is sent
           xxTrustedFormCertUrl: certUrl, // include TrustedForm value
         }),
       });
 
       if (response.ok) {
         setStatus({ type: 'success', message: 'Form submitted successfully!' });
+        
+        // Reset form while clearing the SMID for the next potential user
         setFormData({
           first_name: '', last_name: '', Address: '', City: '',
           reason: '', zipcode: '', phone: '', email: '', subscribe: false,
@@ -88,6 +95,7 @@ const PestControlForm = () => {
         setStatus({ type: 'error', message: 'Failed to submit form.' });
       }
     } catch (error) {
+      console.error("Submission Error:", error);
       setStatus({ type: 'error', message: 'Error connecting to server.' });
     } finally {
       setIsSubmitting(false);

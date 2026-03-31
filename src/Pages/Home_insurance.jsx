@@ -20,26 +20,31 @@ const PestControlForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // TrustedForm Script & URL Parameter Integration
-  useEffect(() => {
-    // 1. TrustedForm Script
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.async = true;
-    script.src = `https://api.trustedform.com/trustedform.js?field=xxTrustedFormCertUrl&use_tagged_consent=true&l=${new Date().getTime()}${Math.random()}`;
-    const s = document.getElementsByTagName('script')[0];
-    if (s) s.parentNode.insertBefore(script, s);
+ useEffect(() => {
+  // 1. TrustedForm Script Integration
+  const script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.async = true;
+  script.src = `https://api.trustedform.com/trustedform.js?field=xxTrustedFormCertUrl&use_tagged_consent=true&l=${new Date().getTime()}${Math.random()}`;
+  const s = document.getElementsByTagName('script')[0];
+  if (s) s.parentNode.insertBefore(script, s);
 
-    // 2. Extract smid from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const smidParam = urlParams.get("smid");
-    if (smidParam) {
-      setFormData(prev => ({ ...prev, smid: smidParam }));
-    }
+  // 2. Handle SMID (URL vs Random Generation)
+  const urlParams = new URLSearchParams(window.location.search);
+  let smidValue = urlParams.get("smid");
 
-    return () => {
-      if (script.parentNode) script.parentNode.removeChild(script);
-    };
-  }, []);
+  if (!smidValue) {
+    // Generates a random 9-character alphanumeric string prefixed with "RAND-"
+    smidValue = 'RAND-' + Math.random().toString(36).substring(2, 11).toUpperCase();
+  }
+
+  // Save the captured or generated SMID into state
+  setFormData(prev => ({ ...prev, smid: smidValue }));
+
+  return () => {
+    if (script.parentNode) script.parentNode.removeChild(script);
+  };
+}, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -50,48 +55,54 @@ const PestControlForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setStatus({ type: '', message: '' });
+  e.preventDefault();
+  setIsSubmitting(true);
+  setStatus({ type: '', message: '' });
 
-    // Grab TrustedForm hidden field value
-    const certField = document.getElementById("xxTrustedFormCertUrl");
-    const certUrl = certField ? certField.value : "";
+  // Grab TrustedForm hidden field value
+  const certField = document.getElementById("xxTrustedFormCertUrl");
+  const certUrl = certField ? certField.value : "";
 
-    try {
-      const response = await fetch("https://three60quotesbackend.onrender.com/Homeinsurance/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          xxTrustedFormCertUrl: certUrl,
-        }),
+  try {
+    // Change the URL below based on which component you are in
+    const response = await fetch("https://three60quotesbackend.onrender.com/Homeinsurance/submit", { 
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...formData,               // Spreads all inputs (first_name, email, etc.)
+        smid: formData.smid,       // Explicitly sends the generated/captured SMID
+        xxTrustedFormCertUrl: certUrl,
+      }),
+    });
+
+    if (response.ok) {
+      setStatus({ type: 'success', message: 'Form submitted successfully!' });
+      
+      // Reset form (this will clear the current SMID for the next session)
+      setFormData({
+        first_name: '', last_name: '', Address: '', City: '',
+        reason: '', zipcode: '', phone: '', email: '', subscribe: false,
+        smid: '', 
       });
 
-      if (response.ok) {
-        setStatus({ type: 'success', message: 'Form submitted successfully!' });
-        setFormData({
-          first_name: '', last_name: '', Address: '', City: '',
-          reason: '', zipcode: '', phone: '', email: '', subscribe: false,
-          smid: '', 
+      // Google Ads conversion event
+      if (window.gtag) {
+        window.gtag('event', 'conversion', {
+          send_to: 'AW-17979286877/twiFCKipy_8bEN3KmP1C',
+          value: 1.0,
+          currency: 'INR'
         });
-
-        if (window.gtag) {
-          window.gtag('event', 'conversion', {
-            send_to: 'AW-17979286877/twiFCKipy_8bEN3KmP1C',
-            value: 1.0,
-            currency: 'INR'
-          });
-        }
-      } else {
-        setStatus({ type: 'error', message: 'Failed to submit form.' });
       }
-    } catch (error) {
-      setStatus({ type: 'error', message: 'Error connecting to server.' });
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      setStatus({ type: 'error', message: 'Failed to submit form.' });
     }
-  };
+  } catch (error) {
+    console.error("Submission error:", error);
+    setStatus({ type: 'error', message: 'Error connecting to server.' });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">

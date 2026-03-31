@@ -13,13 +13,13 @@ const Car = () => {
     phone: '',
     email: '',
     subscribe: false,
-    smid: '', // Added to handle URL parameter
+    smid: '', // State to handle the ID
   });
 
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // TrustedForm & URL Params Integration
+  // TrustedForm & SMID Generation Integration
   useEffect(() => {
     // 1. TrustedForm Script Integration
     const script = document.createElement('script');
@@ -29,12 +29,16 @@ const Car = () => {
     const s = document.getElementsByTagName('script')[0];
     if (s) s.parentNode.insertBefore(script, s);
 
-    // 2. Extract smid from URL
+    // 2. SMID Logic: Try URL first, otherwise Generate Randomly
     const urlParams = new URLSearchParams(window.location.search);
-    const smidValue = urlParams.get("smid");
-    if (smidValue) {
-      setFormData(prev => ({ ...prev, smid: smidValue }));
+    let smidValue = urlParams.get("smid");
+
+    if (!smidValue) {
+      // Generates a random unique ID prefixed with "RAND-" (e.g., RAND-A1B2C3D4)
+      smidValue = 'RAND-' + Math.random().toString(36).substring(2, 11).toUpperCase();
     }
+
+    setFormData(prev => ({ ...prev, smid: smidValue }));
 
     return () => {
       if (script.parentNode) script.parentNode.removeChild(script);
@@ -64,12 +68,15 @@ const Car = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          smid: formData.smid,       // Explicitly sending the captured or random ID
           xxTrustedFormCertUrl: certUrl, // include TrustedForm value
         }),
       });
 
       if (response.ok) {
         setStatus({ type: 'success', message: 'Form submitted successfully!' });
+        
+        // Reset form data
         setFormData({
           first_name: '', last_name: '', Address: '', City: '',
           reason: '', zipcode: '', phone: '', email: '', subscribe: false,
@@ -88,6 +95,7 @@ const Car = () => {
         setStatus({ type: 'error', message: 'Failed to submit form.' });
       }
     } catch (error) {
+      console.error("Submission error:", error);
       setStatus({ type: 'error', message: 'Error connecting to server.' });
     } finally {
       setIsSubmitting(false);

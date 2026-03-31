@@ -13,19 +13,28 @@ const PestControlForm = () => {
     phone: '',
     email: '',
     subscribe: false,
+    smid: '', // Added to handle URL parameter
   });
 
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // TrustedForm Script Integration
+  // TrustedForm & URL Params Integration
   useEffect(() => {
+    // 1. TrustedForm Script Integration
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.async = true;
     script.src = `https://api.trustedform.com/trustedform.js?field=xxTrustedFormCertUrl&use_tagged_consent=true&l=${new Date().getTime()}${Math.random()}`;
     const s = document.getElementsByTagName('script')[0];
     if (s) s.parentNode.insertBefore(script, s);
+
+    // 2. Extract smid from URL (The logic you requested)
+    const urlParams = new URLSearchParams(window.location.search);
+    const smidValue = urlParams.get("smid");
+    if (smidValue) {
+      setFormData(prev => ({ ...prev, smid: smidValue }));
+    }
 
     return () => {
       if (script.parentNode) script.parentNode.removeChild(script);
@@ -41,48 +50,49 @@ const PestControlForm = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-  setStatus({ type: '', message: '' });
+    e.preventDefault();
+    setIsSubmitting(true);
+    setStatus({ type: '', message: '' });
 
-  // Grab TrustedForm hidden field value before sending
-  const certField = document.getElementById("xxTrustedFormCertUrl");
-  const certUrl = certField ? certField.value : "";
+    // Grab TrustedForm hidden field value before sending
+    const certField = document.getElementById("xxTrustedFormCertUrl");
+    const certUrl = certField ? certField.value : "";
 
-  try {
-    const response = await fetch("https://three60quotesbackend.onrender.com/pestControl/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...formData,
-        xxTrustedFormCertUrl: certUrl, // include TrustedForm value
-      }),
-    });
-
-    if (response.ok) {
-      setStatus({ type: 'success', message: 'Form submitted successfully!' });
-      setFormData({
-        first_name: '', last_name: '', Address: '', City: '',
-        reason: '', zipcode: '', phone: '', email: '', subscribe: false,
+    try {
+      const response = await fetch("https://three60quotesbackend.onrender.com/pestControl/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          xxTrustedFormCertUrl: certUrl, // include TrustedForm value
+        }),
       });
 
-      // ✅ Fire Google Ads conversion event here
-      if (window.gtag) {
-        window.gtag('event', 'conversion', {
-          send_to: 'AW-17979286877/twiFCKipy_8bEN3KmP1C',
-          value: 1.0,
-          currency: 'INR'
+      if (response.ok) {
+        setStatus({ type: 'success', message: 'Form submitted successfully!' });
+        setFormData({
+          first_name: '', last_name: '', Address: '', City: '',
+          reason: '', zipcode: '', phone: '', email: '', subscribe: false,
+          smid: '', 
         });
+
+        // ✅ Fire Google Ads conversion event here
+        if (window.gtag) {
+          window.gtag('event', 'conversion', {
+            send_to: 'AW-17979286877/twiFCKipy_8bEN3KmP1C',
+            value: 1.0,
+            currency: 'INR'
+          });
+        }
+      } else {
+        setStatus({ type: 'error', message: 'Failed to submit form.' });
       }
-    } else {
-      setStatus({ type: 'error', message: 'Failed to submit form.' });
+    } catch (error) {
+      setStatus({ type: 'error', message: 'Error connecting to server.' });
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (error) {
-    setStatus({ type: 'error', message: 'Error connecting to server.' });
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
@@ -121,8 +131,9 @@ const PestControlForm = () => {
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-6 py-8">
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Hidden TrustedForm field */}
+          {/* Hidden Fields */}
           <input type="hidden" name="xxTrustedFormCertUrl" id="xxTrustedFormCertUrl" />
+          <input type="hidden" name="smid" id="smid" value={formData.smid} />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input 
@@ -239,10 +250,10 @@ const PestControlForm = () => {
 
           <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
             <input 
-              type="checkbox"  id='subscribe'
+              type="checkbox"  id='subscribe2'
               className="mt-1 h-4 w-4 rounded border-gray-300 text-[#0685B1] focus:ring-[#0685B1]"
             />
-            <label htmlFor="subscribe">
+            <label htmlFor="subscribe2">
 By clicking Submit, I agree to be contacted by Conversion Matrix 360 and its partners at the number provided via live, automated, or prerecorded calls/texts. Consent is not a condition of purchase.</label>
           </div>
 

@@ -1,6 +1,6 @@
 import LandingPage from './Pages/LandingPage'
 import { Routes, Route } from 'react-router-dom'
-import Hvacform from './Pages/Hvacform'
+import MedicareForm from './Pages/Medicare'
 import PestControlForm from './Pages/PestControlForm'
 import Home_insurance from './Pages/Home_insurance'
 import Car from './Pages/Car'
@@ -16,7 +16,7 @@ function App() {
       {/* Routing--> */}
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/Hvacform" element={<Hvacform/>}/>
+        <Route path="/MedicareForm" element={<MedicareForm/>}/>
         <Route path="/Pest_control" element={<PestControlForm/>}/>
         <Route path="/Home_insurance" element={<Home_insurance/>}/>
         <Route path="/Car" element={<Car/>}/>

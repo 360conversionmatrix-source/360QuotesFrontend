@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../Components/common/Navbar';
-const HVACForm = () => {
+
+const MedicareForm = () => {
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -12,19 +13,32 @@ const HVACForm = () => {
     phone: '',
     email: '',
     subscribe: false,
+    smid: '', // State to handle the ID
   });
 
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Initialize TrustedForm Script
+  // TrustedForm & SMID Generation Integration
   useEffect(() => {
+    // 1. TrustedForm Script Integration
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.async = true;
     script.src = `https://api.trustedform.com/trustedform.js?field=xxTrustedFormCertUrl&use_tagged_consent=true&l=${new Date().getTime()}${Math.random()}`;
     const s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(script, s);
+    if (s) s.parentNode.insertBefore(script, s);
+
+    // 2. SMID Logic: Try URL first, otherwise Generate Randomly
+    const urlParams = new URLSearchParams(window.location.search);
+    let smidValue = urlParams.get("smid");
+
+    if (!smidValue) {
+      // Generates a random unique ID prefixed with "RAND-" (e.g., RAND-A1B2C3D4)
+      smidValue = 'RAND-' + Math.random().toString(36).substring(2, 11).toUpperCase();
+    }
+
+    setFormData(prev => ({ ...prev, smid: smidValue }));
 
     return () => {
       if (script.parentNode) script.parentNode.removeChild(script);
@@ -49,25 +63,39 @@ const HVACForm = () => {
     const certUrl = certField ? certField.value : "";
 
     try {
-      const response = await fetch("https://three60quotesbackend.onrender.com/HVAC/submit", {
+      const response = await fetch("https://three60quotesbackend.onrender.com/medicare/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
+          smid: formData.smid,       // Explicitly sending the captured or random ID
           xxTrustedFormCertUrl: certUrl, // include TrustedForm value
         }),
       });
 
       if (response.ok) {
         setStatus({ type: 'success', message: 'Form submitted successfully!' });
+        
+        // Reset form data
         setFormData({
           first_name: '', last_name: '', Address: '', City: '',
           reason: '', zipcode: '', phone: '', email: '', subscribe: false,
+          smid: '', 
         });
+
+        // ✅ Fire Google Ads conversion event here
+        if (window.gtag) {
+          window.gtag('event', 'conversion', {
+            send_to: 'AW-17979286877/twiFCKipy_8bEN3KmP1C',
+            value: 1.0,
+            currency: 'INR'
+          });
+        }
       } else {
         setStatus({ type: 'error', message: 'Failed to submit form.' });
       }
     } catch (error) {
+      console.error("Submission error:", error);
       setStatus({ type: 'error', message: 'Error connecting to server.' });
     } finally {
       setIsSubmitting(false);
@@ -76,18 +104,45 @@ const HVACForm = () => {
 
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
-      <Navbar number="+1(888)XXX-XXXX" />
-      {/* Header Section */}
-      <header className="pt-16 text-center">
-        <h1 className="text-4xl font-bold text-[#0685B1] mt-[50px]">HVAC</h1>
-      </header>
+      <Navbar number="+1(888)-XXXXX" number2="8884793353" />
+      <div className='absolute z-9999 md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
+          <div className='text-center mt-7'>
+            <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>
+        <a 
+          href="tel:+18886480831" 
+          className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-medium"
+        >
+          +1(888)XXXXX
+        </a>
+          </div>
+      </div>
+      {/* Header */}
+      <header className="relative pt-50 md:pt-24 text-center">
+  <img 
+    src="https://res.cloudinary.com/diicgo6ay/image/upload/v1774640803/No-Down-Payment-Car-Insurance_1_f8n94g.png" 
+    alt="Auto Insurance Service"
+    className="w-full h-[300px] sm:h-[600px] object-cover object-top rounded-lg shadow-md z-0"
+  />
 
+  {/* Dark overlay */}
+  <div className="absolute inset-0 bg-black opacity-50 z-2"></div>
+
+  {/* Text content */}
+  <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+    <h1 className="text-3xl pt-32 md:pt-7 md:text-7xl font-bold text-white">MediCare</h1>
+    <h1 className="sm:mt-4  text-xl sm:text-3xl text-white">
+       Compare MediCare Quotes from Trusted Providers
+    </h1>
+  </div>
+</header>
+
+      {/* Main Content */}
       <main className="max-w-4xl mx-auto px-6 py-8">
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Hidden TrustedForm field */}
+          {/* Hidden Fields */}
           <input type="hidden" name="xxTrustedFormCertUrl" id="xxTrustedFormCertUrl" />
+          <input type="hidden" name="smid" id="smid" value={formData.smid} />
 
-          {/* Form Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input 
               type="text" name="first_name" required placeholder="First Name" 
@@ -118,7 +173,7 @@ const HVACForm = () => {
               className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent bg-white"
             >
               <option value="">Select State</option>
-               <option value="Alabama">Alabama</option>
+              <option value="Alabama">Alabama</option>
               <option value="Alaska">Alaska</option>
               <option value="Arizona">Arizona</option>
               <option value="Arkansas">Arkansas</option>
@@ -189,20 +244,27 @@ const HVACForm = () => {
             />
           </div>
 
-          {/* Consent Section */}
-          <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
+          {/* Compliance Text */}
+           <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
             <input 
               type="checkbox" id="subscribe" name="subscribe" 
               checked={formData.subscribe} onChange={handleChange}
               className="mt-1 h-4 w-4 rounded border-gray-300 text-[#0685B1] focus:ring-[#0685B1]"
             />
             <label htmlFor="subscribe">
-              By clicking Submit, I agree to the <Link to="/terms" className="text-[#0685B1] underline">Terms Of Service</Link> and 
-              <Link to="/privacy" className="text-[#0685B1] underline"> Privacy Policy</Link> and authorize HVAC Companies their agents and marketing partners to contact me about HVAC and other non-insurance offers by telephone calls and text messages to the number I provided above. I agree to receive telemarketing calls and pre-recorded messages via an autodialed phone system, even if my telephone number is a mobile number that is currently listed on any state, federal or corporate “Do Not Call” list. I understand that I may revoke my consent at any time and that my consent is not a condition of purchase of any goods or services and that standard message and data rates may apply for California Residents.
+             By clicking "Submit", you agree to be contacted by licensed insurance agents and our partners via phone calls, SMS, or email, even if your number is on a federal or state Do Not Call list. Consent is not a condition of purchase.
             </label>
           </div>
 
-          {/* Submit Button */}
+          <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
+            <input 
+              type="checkbox"  id='subscribe2'
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-[#0685B1] focus:ring-[#0685B1]"
+            />
+            <label htmlFor="subscribe2">
+By clicking Submit, I agree to be contacted by Conversion Matrix 360 and its partners at the number provided via live, automated, or prerecorded calls/texts. Consent is not a condition of purchase.</label>
+          </div>
+
           <div className="pt-4">
             <button 
               type="submit" 
@@ -214,7 +276,6 @@ const HVACForm = () => {
           </div>
         </form>
 
-        {/* Result Message */}
         {status.message && (
           <div className={`mt-4 text-center font-medium ${status.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
             {status.message}
@@ -222,7 +283,6 @@ const HVACForm = () => {
         )}
       </main>
 
-      {/* NoScript for TrustedForm */}
       <noscript>
         <img src='https://api.trustedform.com/ns.gif' alt="trustedform" />
       </noscript>
@@ -230,4 +290,4 @@ const HVACForm = () => {
   );
 };
 
-export default HVACForm;
+export default MedicareForm;

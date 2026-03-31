@@ -113,7 +113,7 @@ const PestControlForm = () => {
   <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
     <h1 className="text-3xl pt-32 md:pt-7 md:text-7xl font-bold text-white">Pest Control</h1>
     <h1 className="sm:mt-4  text-xl sm:text-3xl text-white">
-      <span className="text-[#0685B1] font-bold">Call</span> - Pest Control
+       Compare Pest Control Quotes from Trusted Providers
     </h1>
   </div>
 </header>
@@ -226,20 +226,24 @@ const PestControlForm = () => {
           </div>
 
           {/* Compliance Text */}
-          <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
+           <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
             <input 
               type="checkbox" id="subscribe" name="subscribe" 
               checked={formData.subscribe} onChange={handleChange}
               className="mt-1 h-4 w-4 rounded border-gray-300 text-[#0685B1] focus:ring-[#0685B1]"
             />
             <label htmlFor="subscribe">
-              By clicking Submit, I agree to the <Link to="/terms" className="text-[#0685B1] underline">Terms Of Service</Link> and 
-              <Link to="/privacy" className="text-[#0685B1] underline"> Privacy Policy</Link> and authorize Pest control Companies and their agents and marketing 
-          partners to contact me about Pest Control and other non-insurance offers by telephone calls and text messages to the number I provided 
-          above. I agree to receive telemarketing calls and pre-recorded messages via an autodialed phone system, even if my telephone number is a 
-          mobile number that is currently listed on any state, federal or corporate “Do Not Call” list. I understand that I may revoke my consent at any time 
-          and that my consent is not a condition of purchase of any goods or services and that standard message and data rates may apply for California Residents.
+             By clicking "Submit", you agree to be contacted by licensed insurance agents and our partners via phone calls, SMS, or email, even if your number is on a federal or state Do Not Call list. Consent is not a condition of purchase.
             </label>
+          </div>
+
+          <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
+            <input 
+              type="checkbox"  id='subscribe'
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-[#0685B1] focus:ring-[#0685B1]"
+            />
+            <label htmlFor="subscribe">
+By clicking Submit, I agree to be contacted by Conversion Matrix 360 and its partners at the number provided via live, automated, or prerecorded calls/texts. Consent is not a condition of purchase.</label>
           </div>
 
           <div className="pt-4">

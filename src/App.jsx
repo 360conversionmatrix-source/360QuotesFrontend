@@ -6,13 +6,12 @@ import Home_insurance from './Pages/Home_insurance'
 import Car from './Pages/Car'
 import Navbar from './Components/common/Navbar';
 import Footer from './Components/common/Footer';
-
 function App() {
   return (
     <div>
        {/* --- NAVBAR --- */}
     
-
+      
 
       {/* Routing--> */}
       <Routes>

@@ -22,7 +22,10 @@ const LandingPage = () => {
     { q: "What kinds of services are available?", a: "We provide access to a wide range of home services including pest control, roofing, HVAC, windows, plumbing, water damage restoration, and more." },
     { q: "How quickly will I get connected?", a: "Most calls are connected in under one minute to a verified local professional." },
     { q: "Is there any cost to call?", a: "No. Calling is free and obligation-free. You only pay if you choose to move forward with a service provider." },
-    { q: "Are my details safe?", a: "Yes. All interactions are secure and TCPA-compliant." }
+    { q: "Are my details safe?", a: "Yes. All interactions are secure and TCPA-compliant." },
+    { q: "Is this a government program?", a: "No, we are a private service connecting users with licensed insurance providers." },
+    { q: "Is there any cost?", a: "No, comparing quotes is completely free." },
+    { q: "How quickly will I get contacted?", a: "Usually within a few minutes after submission." },
   ];
 
   return (

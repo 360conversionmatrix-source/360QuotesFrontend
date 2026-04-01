@@ -119,7 +119,7 @@ const MedicareForm = () => {
       {/* Header */}
       <header className="relative pt-50 md:pt-24 text-center">
   <img 
-    src="https://res.cloudinary.com/diicgo6ay/image/upload/v1774640803/No-Down-Payment-Car-Insurance_1_f8n94g.png" 
+    src="https://res.cloudinary.com/diicgo6ay/image/upload/v1775065761/Gemini_Generated_Image_o9naiso9naiso9na_1_s5yflf.png" 
     alt="Auto Insurance Service"
     className="w-full h-[300px] sm:h-[600px] object-cover object-top rounded-lg shadow-md z-0"
   />
@@ -131,7 +131,7 @@ const MedicareForm = () => {
   <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
     <h1 className="text-3xl pt-32 md:pt-7 md:text-7xl font-bold text-white">MediCare</h1>
     <h1 className="sm:mt-4  text-xl sm:text-3xl text-white">
-       Compare MediCare Quotes from Trusted Providers
+       Get MediCare Quotes from Trusted Providers
     </h1>
   </div>
 </header>

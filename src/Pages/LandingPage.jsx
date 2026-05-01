@@ -16,6 +16,7 @@ const LandingPage = () => {
     { title: "Pest Control", icon: "fa-bug", link: "/Pest_control" },
     { title: "Auto Insurance", icon: "fa-car", link: "/Car" },
     { title: "Home Insurance", icon: "fa-home", link: "/Home_insurance" },
+    { title: "Final Expence", icon: "fa-file-invoice-dollar", link: "/Final_Expence" }
   ];
 
   const faqs = [
@@ -50,7 +51,7 @@ const LandingPage = () => {
         </p>
 
         {/* Updated Grid Container: 2 columns on mobile, 4 on desktop */}
-        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-5 md:gap-6">
           {services.map((service, idx) => (
             <Link 
               key={idx} 

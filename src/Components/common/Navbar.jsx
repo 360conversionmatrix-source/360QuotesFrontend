@@ -70,6 +70,8 @@ const Navbar = ({ number,number2 }) => {
         </span>
       </button>
       </div>
+      
+
     </nav>
   );
 };

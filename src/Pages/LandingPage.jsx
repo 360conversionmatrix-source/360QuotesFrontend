@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import img from '../../public/compare-image.png';
 import Navbar from '../Components/common/Navbar';
+import Dis from '../Components/common/DisMar';
+
 
 
 const LandingPage = () => {
@@ -10,6 +12,12 @@ const LandingPage = () => {
   const toggleFAQ = (index) => {
     setOpenFaq(openFaq === index ? null : index);
   };
+  const disclaimerText = (
+    <>
+      <span className="font-bold">Disclaimer:</span> 360Holding Quotes is a free service to assist homeowners in connecting with local service providers. All contractors/providers are independent and 360Holding Quotes does not warrant or guarantee any work performed. It is the responsibility of the homeowner to verify that the hired contractor furnishes the necessary license and insurance required for the work being performed. All persons depicted in a photo or video are actors or models and not contractors listed on 360Holding Quotes. Same-day and 24/7 emergency services are subject to provider participation, location, technician availability, and demand. Availability is not guaranteed and may vary by market and appointment capacity.
+      &nbsp;&nbsp; | &nbsp;&nbsp;
+    </>
+  );
 
   const services = [
     { title: "Medicare", icon: "fa-heartbeat", link: "/MedicareForm" },
@@ -32,7 +40,7 @@ const LandingPage = () => {
   return (
     <div className="font-['Inter',_sans-serif] text-[#2c3e50]">
       <Navbar number="+1(888)XXX-XXXX" />
-       
+       <Dis/>
       
       {/* --- HERO & SERVICES SECTION --- */}
       <section
@@ -156,11 +164,11 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
-
-        
-      
+           
     </div>
   );
 };
 
 export default LandingPage;
+
+

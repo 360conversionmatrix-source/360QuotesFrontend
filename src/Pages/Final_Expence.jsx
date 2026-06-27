@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../Components/common/Navbar';
+import DisclaimerMarquee from '../Components/common/DisclaimerMarquee';
 
 const FinalExpence = () => {
   const [formData, setFormData] = useState({
@@ -105,7 +106,8 @@ const FinalExpence = () => {
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
       <Navbar number="+1(888)-XXXXX" number2="8884793353" />
-      <div className='absolute z-9999 md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
+      <DisclaimerMarquee/>
+      <div className='absolute z-999 md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
           <div className='text-center mt-7'>
             <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>
         <a 

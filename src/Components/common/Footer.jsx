@@ -30,13 +30,13 @@ const Footer = () => {
                 <Link to="/" className="hover:text-[#0685B1] transition-colors">Home</Link>
               </li>
               <li>
-                <a href="#services" className="hover:text-[#0685B1] transition-colors">Get Started</a>
+                <a href="https://www.360holdingquotes.com/#services" className="hover:text-[#0685B1] transition-colors">Get Started</a>
               </li>
               <li>
-                <a href="#faq" className="hover:text-[#0685B1] transition-colors">FAQ</a>
+                <a href="https://www.360holdingquotes.com/#faq" className="hover:text-[#0685B1] transition-colors">FAQ</a>
               </li>
               <li>
-                <a href="#services" className="hover:text-[#0685B1] transition-colors">Contact Us</a>
+                <a href="https://www.360holdingquotes.com/#services" className="hover:text-[#0685B1] transition-colors">Contact Us</a>
               </li>
             </ul>
           </div>
@@ -50,12 +50,6 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/terms-of-service" className="hover:text-[#0685B1] transition-colors">Terms and Conditions</Link>
-              </li>
-              <li>
-                <Link to="/partners" className="hover:text-[#0685B1] transition-colors">Partners</Link>
-              </li>
-              <li>
-                <Link to="/ccpa" className="hover:text-[#0685B1] transition-colors">CCPA</Link>
               </li>
             </ul>
           </div>

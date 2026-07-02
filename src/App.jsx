@@ -7,6 +7,8 @@ import Car from './Pages/Car'
 import Navbar from './Components/common/Navbar';
 import Footer from './Components/common/Footer';
 import FinalExpence from './Pages/Final_Expence';
+import PrivacyComponent from './Pages/Privacy'
+import TermsAndConditionsComponent from './Pages/Terms'
 function App() {
   return (
     <div>
@@ -22,6 +24,8 @@ function App() {
         <Route path="/Home_insurance" element={<Home_insurance/>}/>
         <Route path="/Car" element={<Car/>}/>
         <Route path="/Final_Expence" element={<FinalExpence/>}/>
+        <Route path="/privacy-policy" element={<PrivacyComponent/>}/>
+        <Route path="/terms-and-conditions" element={<TermsAndConditionsComponent/>}/>
 
       </Routes>
 

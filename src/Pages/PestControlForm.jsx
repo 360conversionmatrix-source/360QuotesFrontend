@@ -114,7 +114,7 @@ const PestControlForm = () => {
           href="tel:+18886480831" 
           className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-medium"
         >
-          +1(888)6480831
+          +1(888)-XXXXX
         </a>
           </div>
       </div>

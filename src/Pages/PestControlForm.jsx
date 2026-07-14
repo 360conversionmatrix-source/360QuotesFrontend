@@ -105,7 +105,7 @@ const PestControlForm = () => {
 
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
-      <Navbar number="+1(888)-XXXXX" number2="8884793353" />
+      <Navbar number="+1(888)-XXXXX" number2="+1(888)-XXXXX" />
       <DisclaimerMarquee/>
       <div className='absolute z-9999 md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
           <div className='text-center mt-7'>

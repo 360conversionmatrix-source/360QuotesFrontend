@@ -105,16 +105,16 @@ const PestControlForm = () => {
 
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
-      <Navbar number="+18449143265" number2="+18449143265" />
+      <Navbar number="+18584775382" number2="+18584775382" />
       <DisclaimerMarquee/>
       <div className='absolute z-9999 md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
           <div className='text-center mt-7'>
             <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>
         <a 
-          href="tel:++18449143265" 
+          href="tel:++18584775382" 
           className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-medium"
         >
-          +1(844)-914-3265
+          +1(858)-477-5382
         </a>
           </div>
       </div>

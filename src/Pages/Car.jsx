@@ -64,7 +64,7 @@ const Car = () => {
     const certUrl = certField ? certField.value : "";
 
     try {
-      const response = await fetch("https://three60quotesbackend.onrender.com/autoinsurance/submit", {
+      const response = await fetch("https://quotes-bdjj.onrender.com/autoinsurance/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

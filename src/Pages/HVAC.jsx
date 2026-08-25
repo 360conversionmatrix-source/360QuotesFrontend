@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../Components/common/Navbar';
 import DisclaimerMarquee from '../Components/common/DisclaimerMarquee';
 
-const PestControlForm = () => {
+const HVAC = () => {
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -14,7 +14,7 @@ const PestControlForm = () => {
     phone: '',
     email: '',
     subscribe: false,
-    smid: '', // State to hold the captured or generated ID
+    smid: '', // State to handle the ID
   });
 
   const [status, setStatus] = useState({ type: '', message: '' });
@@ -35,7 +35,7 @@ const PestControlForm = () => {
     let smidValue = urlParams.get("smid");
 
     if (!smidValue) {
-      // Generates a random unique ID prefixed with "RAND-" (e.g., RAND-K92JS81L)
+      // Generates a random unique ID prefixed with "RAND-" (e.g., RAND-A1B2C3D4)
       smidValue = 'RAND-' + Math.random().toString(36).substring(2, 11).toUpperCase();
     }
 
@@ -64,12 +64,12 @@ const PestControlForm = () => {
     const certUrl = certField ? certField.value : "";
 
     try {
-      const response = await fetch("https://quotes-bdjj.onrender.com/pestControl/submit", {
+      const response = await fetch("https://quotes-bdjj.onrender.com/HVAC/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          smid: formData.smid,       // Explicitly ensure the generated/captured ID is sent
+          smid: formData.smid,       // Explicitly sending the captured or random ID
           xxTrustedFormCertUrl: certUrl, // include TrustedForm value
         }),
       });
@@ -77,7 +77,7 @@ const PestControlForm = () => {
       if (response.ok) {
         setStatus({ type: 'success', message: 'Form submitted successfully!' });
         
-        // Reset form while clearing the SMID for the next potential user
+        // Reset form data
         setFormData({
           first_name: '', last_name: '', Address: '', City: '',
           reason: '', zipcode: '', phone: '', email: '', subscribe: false,
@@ -96,7 +96,7 @@ const PestControlForm = () => {
         setStatus({ type: 'error', message: 'Failed to submit form.' });
       }
     } catch (error) {
-      console.error("Submission Error:", error);
+      console.error("Submission error:", error);
       setStatus({ type: 'error', message: 'Error connecting to server.' });
     } finally {
       setIsSubmitting(false);
@@ -105,24 +105,24 @@ const PestControlForm = () => {
 
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
-      <Navbar number="+18584775382" number2="+18584775382" />
+      <Navbar number="+1(888)-XXXXX" number2="8884793353" />
       <DisclaimerMarquee/>
-      <div className='absolute z-9999 md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
+      <div className='absolute z-999 md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
           <div className='text-center mt-7'>
             <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>
         <a 
-          href="tel:++18584775382" 
+          href="tel:+18886480831" 
           className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-medium"
         >
-          +1(858)-477-5382
+          +1(888)XXXXX
         </a>
           </div>
       </div>
       {/* Header */}
       <header className="relative pt-50 md:pt-24 text-center">
   <img 
-    src="https://res.cloudinary.com/diicgo6ay/image/upload/v1772142550/E1032YVG_1_gxikwg.jpg" 
-    alt="Pest Control Service"
+    src="https://res.cloudinary.com/diicgo6ay/image/upload/v1787675404/hero-93-1189560369_1_ci8k4c.jpg" 
+    alt="final expense Service"
     className="w-full h-[300px] sm:h-[600px] object-cover object-top rounded-lg shadow-md z-0"
   />
 
@@ -131,9 +131,9 @@ const PestControlForm = () => {
 
   {/* Text content */}
   <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-    <h1 className="text-3xl pt-32 md:pt-7 md:text-7xl font-bold text-white">Pest Control</h1>
+    <h1 className="text-3xl pt-32 md:pt-7 md:text-7xl font-bold text-white">HVAC</h1>
     <h1 className="sm:mt-4  text-xl sm:text-3xl text-white">
-       Compare Pest Control Quotes from Trusted Providers
+       Get HVAC Quotes from Trusted Providers
     </h1>
   </div>
 </header>
@@ -292,4 +292,4 @@ By clicking Submit, I agree to be contacted by Conversion Matrix 360 and its par
   );
 };
 
-export default PestControlForm;
+export default HVAC;

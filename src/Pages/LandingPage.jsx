@@ -24,7 +24,8 @@ const LandingPage = () => {
     { title: "Pest Control", icon: "fa-bug", link: "/Pest_control" },
     { title: "Auto Insurance", icon: "fa-car", link: "/Car" },
     { title: "Home Insurance", icon: "fa-home", link: "/Home_insurance" },
-    { title: "Final Expence", icon: "fa-file-invoice-dollar", link: "/Final_Expence" }
+    { title: "Windows Repair & Replacement", icon: "fa-window-maximize", link: "/windowsDoors" },
+    { title: "HVAC", icon: "fa-thermometer-half", link: "/HVAC" }
   ];
 
   const faqs = [

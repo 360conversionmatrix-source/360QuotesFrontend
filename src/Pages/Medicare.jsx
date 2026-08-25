@@ -64,7 +64,7 @@ const MedicareForm = () => {
     const certUrl = certField ? certField.value : "";
 
     try {
-      const response = await fetch("https://three60quotesbackend.onrender.com/medicare/submit", {
+      const response = await fetch("https://quotes-bdjj.onrender.com/medicare/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

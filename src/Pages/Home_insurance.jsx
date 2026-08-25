@@ -66,7 +66,7 @@ const PestControlForm = () => {
 
   try {
     // Change the URL below based on which component you are in
-    const response = await fetch("https://three60quotesbackend.onrender.com/Homeinsurance/submit", { 
+    const response = await fetch("https://quotes-bdjj.onrender.com/Homeinsurance/submit", { 
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

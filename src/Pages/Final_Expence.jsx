@@ -64,7 +64,7 @@ const FinalExpence = () => {
     const certUrl = certField ? certField.value : "";
 
     try {
-      const response = await fetch("https://three60quotesbackend.onrender.com/FinalExpence/submit", {
+      const response = await fetch("https://quotes-bdjj.onrender.com/FinalExpence/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

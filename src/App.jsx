@@ -5,8 +5,9 @@ import PestControlForm from './Pages/PestControlForm'
 import Home_insurance from './Pages/Home_insurance'
 import Car from './Pages/Car'
 import Navbar from './Components/common/Navbar';
+import WindowsDoors from './Pages/WindowDoors';
 import Footer from './Components/common/Footer';
-import FinalExpence from './Pages/Final_Expence';
+import HVAC from './Pages/HVAC';
 import PrivacyComponent from './Pages/Privacy'
 import TermsAndConditionsComponent from './Pages/Terms'
 function App() {
@@ -23,7 +24,8 @@ function App() {
         <Route path="/Pest_control" element={<PestControlForm/>}/>
         <Route path="/Home_insurance" element={<Home_insurance/>}/>
         <Route path="/Car" element={<Car/>}/>
-        <Route path="/Final_Expence" element={<FinalExpence/>}/>
+        <Route path="/HVAC" element={<HVAC/>}/>
+        <Route path="/windowsDoors" element={<WindowsDoors/>}/>
         <Route path="/privacy-policy" element={<PrivacyComponent/>}/>
         <Route path="/terms-and-conditions" element={<TermsAndConditionsComponent/>}/>
 

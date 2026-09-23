@@ -14,13 +14,14 @@ const PestControlForm = () => {
     phone: '',
     email: '',
     subscribe: false,
-    smid: '', // State to hold the captured or generated ID
+    smid: '',  // State to hold the captured or generated ID
+    gclid: '', // ✅ State to hold the Google Click ID
   });
 
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // TrustedForm & SMID Generation Integration
+  // TrustedForm, SMID, & GCLID Integration
   useEffect(() => {
     // 1. TrustedForm Script Integration
     const script = document.createElement('script');
@@ -30,16 +31,29 @@ const PestControlForm = () => {
     const s = document.getElementsByTagName('script')[0];
     if (s) s.parentNode.insertBefore(script, s);
 
-    // 2. SMID Logic: Try URL first, otherwise Generate Randomly
+    // 2. Query Params: Capture SMID & GCLID
     const urlParams = new URLSearchParams(window.location.search);
+    
+    // SMID Logic
     let smidValue = urlParams.get("smid");
-
     if (!smidValue) {
-      // Generates a random unique ID prefixed with "RAND-" (e.g., RAND-K92JS81L)
       smidValue = 'RAND-' + Math.random().toString(36).substring(2, 11).toUpperCase();
     }
 
-    setFormData(prev => ({ ...prev, smid: smidValue }));
+    // ✅ GCLID Logic: Check URL first; if found, persist to sessionStorage
+    let gclidValue = urlParams.get("gclid");
+    if (gclidValue) {
+      sessionStorage.setItem("gclid", gclidValue);
+    } else {
+      // Fallback: Check if it was saved earlier in the current user session
+      gclidValue = sessionStorage.getItem("gclid") || '';
+    }
+
+    setFormData(prev => ({ 
+      ...prev, 
+      smid: smidValue,
+      gclid: gclidValue 
+    }));
 
     return () => {
       if (script.parentNode) script.parentNode.removeChild(script);
@@ -69,19 +83,21 @@ const PestControlForm = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          smid: formData.smid,       // Explicitly ensure the generated/captured ID is sent
-          xxTrustedFormCertUrl: certUrl, // include TrustedForm value
+          smid: formData.smid,                  // Ensure SMID is sent
+          xxTrustedFormCertUrl: certUrl,        // Include TrustedForm value
+          gclid: formData.gclid || sessionStorage.getItem("gclid") || null, // ✅ Send GCLID
         }),
       });
 
       if (response.ok) {
         setStatus({ type: 'success', message: 'Form submitted successfully!' });
         
-        // Reset form while clearing the SMID for the next potential user
+        // Reset form while clearing the SMID and GCLID
         setFormData({
           first_name: '', last_name: '', Address: '', City: '',
           reason: '', zipcode: '', phone: '', email: '', subscribe: false,
           smid: '', 
+          gclid: '',
         });
 
         // ✅ Fire Google Ads conversion event here
@@ -108,35 +124,36 @@ const PestControlForm = () => {
       <Navbar number="+18584775382" number2="+18584775382" />
       <DisclaimerMarquee/>
       <div className='absolute z-9999 md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
-          <div className='text-center mt-7'>
-            <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>
-        <a 
-          href="tel:++18584775382" 
-          className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-medium"
-        >
-          +1(858)-477-5382
-        </a>
-          </div>
+        <div className='text-center mt-7'>
+          <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>
+          <a 
+            href="tel:++18584775382" 
+            className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-medium"
+          >
+            +1(858)-477-5382
+          </a>
+        </div>
       </div>
+
       {/* Header */}
       <header className="relative pt-50 md:pt-24 text-center">
-  <img 
-    src="https://res.cloudinary.com/diicgo6ay/image/upload/v1772142550/E1032YVG_1_gxikwg.jpg" 
-    alt="Pest Control Service"
-    className="w-full h-[300px] sm:h-[600px] object-cover object-top rounded-lg shadow-md z-0"
-  />
+        <img 
+          src="https://res.cloudinary.com/diicgo6ay/image/upload/v1772142550/E1032YVG_1_gxikwg.jpg" 
+          alt="Pest Control Service"
+          className="w-full h-[300px] sm:h-[600px] object-cover object-top rounded-lg shadow-md z-0"
+        />
 
-  {/* Dark overlay */}
-  <div className="absolute inset-0 bg-black opacity-50 z-2"></div>
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black opacity-50 z-2"></div>
 
-  {/* Text content */}
-  <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-    <h1 className="text-3xl pt-32 md:pt-7 md:text-7xl font-bold text-white">Pest Control</h1>
-    <h1 className="sm:mt-4  text-xl sm:text-3xl text-white">
-       Compare Pest Control Quotes from Trusted Providers
-    </h1>
-  </div>
-</header>
+        {/* Text content */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+          <h1 className="text-3xl pt-32 md:pt-7 md:text-7xl font-bold text-white">Pest Control</h1>
+          <h1 className="sm:mt-4 text-xl sm:text-3xl text-white">
+            Compare Pest Control Quotes from Trusted Providers
+          </h1>
+        </div>
+      </header>
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-6 py-8">
@@ -144,6 +161,8 @@ const PestControlForm = () => {
           {/* Hidden Fields */}
           <input type="hidden" name="xxTrustedFormCertUrl" id="xxTrustedFormCertUrl" />
           <input type="hidden" name="smid" id="smid" value={formData.smid} />
+          {/* ✅ Hidden GCLID Input */}
+          <input type="hidden" name="gclid" id="gclid" value={formData.gclid} />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input 
@@ -247,24 +266,25 @@ const PestControlForm = () => {
           </div>
 
           {/* Compliance Text */}
-           <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
+          <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
             <input 
               type="checkbox" id="subscribe" name="subscribe" 
               checked={formData.subscribe} onChange={handleChange}
               className="mt-1 h-4 w-4 rounded border-gray-300 text-[#0685B1] focus:ring-[#0685B1]"
             />
             <label htmlFor="subscribe">
-             By clicking "Submit", you agree to be contacted by licensed insurance agents and our partners via phone calls, SMS, or email, even if your number is on a federal or state Do Not Call list. Consent is not a condition of purchase.
+              By clicking "Submit", you agree to be contacted by licensed insurance agents and our partners via phone calls, SMS, or email, even if your number is on a federal or state Do Not Call list. Consent is not a condition of purchase.
             </label>
           </div>
 
           <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
             <input 
-              type="checkbox"  id='subscribe2'
+              type="checkbox" id='subscribe2'
               className="mt-1 h-4 w-4 rounded border-gray-300 text-[#0685B1] focus:ring-[#0685B1]"
             />
             <label htmlFor="subscribe2">
-By clicking Submit, I agree to be contacted by Conversion Matrix 360 and its partners at the number provided via live, automated, or prerecorded calls/texts. Consent is not a condition of purchase.</label>
+              By clicking Submit, I agree to be contacted by Conversion Matrix 360 and its partners at the number provided via live, automated, or prerecorded calls/texts. Consent is not a condition of purchase.
+            </label>
           </div>
 
           <div className="pt-4">

@@ -25,7 +25,10 @@ const LandingPage = () => {
     { title: "Auto Insurance", icon: "fa-car", link: "/Car" },
     { title: "Home Insurance", icon: "fa-home", link: "/Home_insurance" },
     { title: "Windows Repair & Replacement", icon: "fa-window-maximize", link: "/windowsDoors" },
-    { title: "HVAC", icon: "fa-thermometer-half", link: "/HVAC" }
+    { title: "HVAC", icon: "fa-thermometer-half", link: "/HVAC" },
+    { title: "Plumbing", icon: "fa-faucet", link: "/Plumbing" },
+    { title: "Final Expense", icon: "fa-heart-pulse", link: "/Final" },
+    { title: "Roofing", icon: "fa-home", link: "/Roofing" }
   ];
 
   const faqs = [

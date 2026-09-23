@@ -10,6 +10,10 @@ import Footer from './Components/common/Footer';
 import HVAC from './Pages/HVAC';
 import PrivacyComponent from './Pages/Privacy'
 import TermsAndConditionsComponent from './Pages/Terms'
+import RoofingForm from './Pages/Roofing'
+import PlumbingForm from './Pages/Plumbing'
+import FinalExpence from './Pages/Final_Expence'
+
 function App() {
   return (
     <div>
@@ -26,6 +30,9 @@ function App() {
         <Route path="/Car" element={<Car/>}/>
         <Route path="/HVAC" element={<HVAC/>}/>
         <Route path="/windowsDoors" element={<WindowsDoors/>}/>
+        <Route path="/Plumbing" element={<PlumbingForm/>}/>
+        <Route path="/Roofing" element={<RoofingForm/>}/>
+        <Route path="/Final" element={<FinalExpence/>}/>
         <Route path="/privacy-policy" element={<PrivacyComponent/>}/>
         <Route path="/terms-and-conditions" element={<TermsAndConditionsComponent/>}/>
 

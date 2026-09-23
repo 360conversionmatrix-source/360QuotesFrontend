@@ -14,8 +14,8 @@ const PestControlForm = () => {
     phone: '',
     email: '',
     subscribe: false,
-    smid: '',  // State to hold the captured or generated ID
-    gclid: '', // ✅ State to hold the Google Click ID
+    smid: '',  // State to hold the captured or generated SMID
+    gclid: '', // State to hold the Google Click ID
   });
 
   const [status, setStatus] = useState({ type: '', message: '' });
@@ -31,24 +31,37 @@ const PestControlForm = () => {
     const s = document.getElementsByTagName('script')[0];
     if (s) s.parentNode.insertBefore(script, s);
 
-    // 2. Query Params: Capture SMID & GCLID
+    // 2. Query Params: Capture or Create SMID & GCLID
     const urlParams = new URLSearchParams(window.location.search);
     
-    // SMID Logic
+    // --- SMID Logic ---
     let smidValue = urlParams.get("smid");
     if (!smidValue) {
       smidValue = 'RAND-' + Math.random().toString(36).substring(2, 11).toUpperCase();
     }
 
-    // ✅ GCLID Logic: Check URL first; if found, persist to sessionStorage
+    // --- GCLID Logic ---
     let gclidValue = urlParams.get("gclid");
-    if (gclidValue) {
-      sessionStorage.setItem("gclid", gclidValue);
-    } else {
-      // Fallback: Check if it was saved earlier in the current user session
-      gclidValue = sessionStorage.getItem("gclid") || '';
+
+    if (!gclidValue) {
+      // Check if one was already saved during this session
+      gclidValue = sessionStorage.getItem("gclid");
+
+      // If still missing, generate a test GCLID
+      if (!gclidValue) {
+        gclidValue = 'TEST_GCLID-' + Math.random().toString(36).substring(2, 12).toUpperCase();
+      }
+
+      // Append gclid to URL address bar dynamically without page reload
+      urlParams.set("gclid", gclidValue);
+      const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
+      window.history.replaceState({ path: newUrl }, '', newUrl);
     }
 
+    // Save to sessionStorage for cross-navigation retention
+    sessionStorage.setItem("gclid", gclidValue);
+
+    // Save values into React state
     setFormData(prev => ({ 
       ...prev, 
       smid: smidValue,
@@ -83,24 +96,30 @@ const PestControlForm = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
-          smid: formData.smid,                  // Ensure SMID is sent
-          xxTrustedFormCertUrl: certUrl,        // Include TrustedForm value
-          gclid: formData.gclid || sessionStorage.getItem("gclid") || null, // ✅ Send GCLID
+          smid: formData.smid,
+          xxTrustedFormCertUrl: certUrl,
+          gclid: formData.gclid || sessionStorage.getItem("gclid") || null,
         }),
       });
 
       if (response.ok) {
         setStatus({ type: 'success', message: 'Form submitted successfully!' });
         
-        // Reset form while clearing the SMID and GCLID
-        setFormData({
-          first_name: '', last_name: '', Address: '', City: '',
-          reason: '', zipcode: '', phone: '', email: '', subscribe: false,
-          smid: '', 
-          gclid: '',
-        });
+        // Reset form inputs (retains smid and gclid)
+        setFormData(prev => ({
+          ...prev,
+          first_name: '', 
+          last_name: '', 
+          Address: '', 
+          City: '',
+          reason: '', 
+          zipcode: '', 
+          phone: '', 
+          email: '', 
+          subscribe: false,
+        }));
 
-        // ✅ Fire Google Ads conversion event here
+        // Fire Google Ads conversion event
         if (window.gtag) {
           window.gtag('event', 'conversion', {
             send_to: 'AW-17979286877/twiFCKipy_8bEN3KmP1C',
@@ -161,7 +180,6 @@ const PestControlForm = () => {
           {/* Hidden Fields */}
           <input type="hidden" name="xxTrustedFormCertUrl" id="xxTrustedFormCertUrl" />
           <input type="hidden" name="smid" id="smid" value={formData.smid} />
-          {/* ✅ Hidden GCLID Input */}
           <input type="hidden" name="gclid" id="gclid" value={formData.gclid} />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -3,16 +3,6 @@ import { Link } from 'react-router-dom';
 import Navbar from '../Components/common/Navbar';
 import DisclaimerMarquee from '../Components/common/DisclaimerMarquee';
 
-// Helper function to generate a random GCLID matching real Google format
-const generateRandomGclid = () => {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-  let randomString = '';
-  for (let i = 0; i < 40; i++) {
-    randomString += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return `CjwKCAi${randomString}`;
-};
-
 const PestControlForm = () => {
   const [formData, setFormData] = useState({
     first_name: '',
@@ -25,13 +15,12 @@ const PestControlForm = () => {
     email: '',
     subscribe: false,
     smid: '',
-    gclid: '', // Holds the GCLID
+    gclid: '', // Only holds a real GCLID if present
   });
 
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // TrustedForm, SMID, & Random GCLID Generation Integration
   useEffect(() => {
     // 1. TrustedForm Script Integration
     const script = document.createElement('script');
@@ -41,36 +30,31 @@ const PestControlForm = () => {
     const s = document.getElementsByTagName('script')[0];
     if (s) s.parentNode.insertBefore(script, s);
 
-    // 2. Query Params: Capture SMID & Random GCLID
+    // 2. Query Params
     const urlParams = new URLSearchParams(window.location.search);
-    
-    // --- SMID Logic ---
+
+    // SMID Logic
     let smidValue = urlParams.get("smid");
     if (!smidValue) {
       smidValue = 'RAND-' + Math.random().toString(36).substring(2, 11).toUpperCase();
     }
 
-    // --- GCLID Logic: Always generate randomly if not in URL ---
+    // ✅ GCLID Logic: Only capture if present from Google Ads
     let gclidValue = urlParams.get("gclid");
 
-    if (!gclidValue) {
-      // Generate a new random GCLID
-      gclidValue = generateRandomGclid();
-
-      // Immediately append ?gclid=... to the browser address bar without reloading
-      urlParams.set("gclid", gclidValue);
-      const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
-      window.history.replaceState({ path: newUrl }, '', newUrl);
+    if (gclidValue) {
+      // If the visitor came via a Google Ad click, store it for the session
+      sessionStorage.setItem("gclid", gclidValue);
+    } else {
+      // Check if they previously landed on an ad page earlier in this session
+      gclidValue = sessionStorage.getItem("gclid") || '';
     }
 
-    // Keep in sessionStorage
-    sessionStorage.setItem("gclid", gclidValue);
-
-    // Update state
-    setFormData(prev => ({ 
-      ...prev, 
+    // Update state (empty string/null if not from an ad)
+    setFormData((prev) => ({
+      ...prev,
       smid: smidValue,
-      gclid: gclidValue 
+      gclid: gclidValue,
     }));
 
     return () => {
@@ -103,24 +87,24 @@ const PestControlForm = () => {
           ...formData,
           smid: formData.smid,
           xxTrustedFormCertUrl: certUrl,
+          // Sends the real GCLID if they came from an ad, otherwise null
           gclid: formData.gclid || sessionStorage.getItem("gclid") || null,
         }),
       });
 
       if (response.ok) {
         setStatus({ type: 'success', message: 'Form submitted successfully!' });
-        
-        // Reset form inputs
-        setFormData(prev => ({
+
+        setFormData((prev) => ({
           ...prev,
-          first_name: '', 
-          last_name: '', 
-          Address: '', 
+          first_name: '',
+          last_name: '',
+          Address: '',
           City: '',
-          reason: '', 
-          zipcode: '', 
-          phone: '', 
-          email: '', 
+          reason: '',
+          zipcode: '',
+          phone: '',
+          email: '',
           subscribe: false,
         }));
 
@@ -129,7 +113,7 @@ const PestControlForm = () => {
           window.gtag('event', 'conversion', {
             send_to: 'AW-17979286877/twiFCKipy_8bEN3KmP1C',
             value: 1.0,
-            currency: 'INR'
+            currency: 'INR',
           });
         }
       } else {
@@ -146,12 +130,12 @@ const PestControlForm = () => {
   return (
     <div className="bg-white font-sans text-gray-700 min-h-screen">
       <Navbar number="+18584775382" number2="+18584775382" />
-      <DisclaimerMarquee/>
-      <div className='absolute z-9999 md:hidden fixed top-[100px] w-full h-[100px] bg-white'>
-        <div className='text-center mt-7'>
+      <DisclaimerMarquee />
+      <div className="absolute z-9999 md:hidden fixed top-[100px] w-full h-[100px] bg-white">
+        <div className="text-center mt-7">
           <h5 className="m-0 p-0 text-md font-medium">Get your free quotes now</h5>
-          <a 
-            href="tel:++18584775382" 
+          <a
+            href="tel:+18584775382"
             className="m-0 p-2 text-[#2c3e50] transition-all duration-300 hover:text-[#0685B1] font-medium"
           >
             +1(858)-477-5382
@@ -161,8 +145,8 @@ const PestControlForm = () => {
 
       {/* Header */}
       <header className="relative pt-50 md:pt-24 text-center">
-        <img 
-          src="https://res.cloudinary.com/diicgo6ay/image/upload/v1772142550/E1032YVG_1_gxikwg.jpg" 
+        <img
+          src="https://res.cloudinary.com/diicgo6ay/image/upload/v1772142550/E1032YVG_1_gxikwg.jpg"
           alt="Pest Control Service"
           className="w-full h-[300px] sm:h-[600px] object-cover object-top rounded-lg shadow-md z-0"
         />
@@ -186,32 +170,50 @@ const PestControlForm = () => {
           <input type="hidden" name="gclid" id="gclid" value={formData.gclid} />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input 
-              type="text" name="first_name" required placeholder="First Name" 
-              value={formData.first_name} onChange={handleChange}
-              className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
-            />
-            
-            <input 
-              type="text" name="last_name" required placeholder="Last Name" 
-              value={formData.last_name} onChange={handleChange}
-              className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
-            />
-
-            <input 
-              type="text" name="Address" required placeholder="Address" 
-              value={formData.Address} onChange={handleChange}
+            <input
+              type="text"
+              name="first_name"
+              required
+              placeholder="First Name"
+              value={formData.first_name}
+              onChange={handleChange}
               className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
             />
 
-            <input 
-              type="text" name="City" required placeholder="City" 
-              value={formData.City} onChange={handleChange}
+            <input
+              type="text"
+              name="last_name"
+              required
+              placeholder="Last Name"
+              value={formData.last_name}
+              onChange={handleChange}
               className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
             />
 
-            <select 
-              name="reason" value={formData.reason} onChange={handleChange}
+            <input
+              type="text"
+              name="Address"
+              required
+              placeholder="Address"
+              value={formData.Address}
+              onChange={handleChange}
+              className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
+            />
+
+            <input
+              type="text"
+              name="City"
+              required
+              placeholder="City"
+              value={formData.City}
+              onChange={handleChange}
+              className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
+            />
+
+            <select
+              name="reason"
+              value={formData.reason}
+              onChange={handleChange}
               className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent bg-white"
             >
               <option value="">Select State</option>
@@ -267,29 +269,45 @@ const PestControlForm = () => {
               <option value="Wyoming">Wyoming</option>
             </select>
 
-            <input 
-              type="text" name="zipcode" pattern="^\d{5}(-\d{4})?$" required placeholder="Zip Code" 
-              value={formData.zipcode} onChange={handleChange}
+            <input
+              type="text"
+              name="zipcode"
+              pattern="^\d{5}(-\d{4})?$"
+              required
+              placeholder="Zip Code"
+              value={formData.zipcode}
+              onChange={handleChange}
               className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
             />
 
-            <input 
-              type="tel" name="phone" pattern="[0-9+\-() ]{7,}" placeholder="Phone Number" 
-              value={formData.phone} onChange={handleChange}
+            <input
+              type="tel"
+              name="phone"
+              pattern="[0-9+\-() ]{7,}"
+              placeholder="Phone Number"
+              value={formData.phone}
+              onChange={handleChange}
               className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
             />
 
-            <input 
-              type="email" name="email" required placeholder="E-mail" 
-              value={formData.email} onChange={handleChange}
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="E-mail"
+              value={formData.email}
+              onChange={handleChange}
               className="w-full border border-gray-300 p-3 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0685B1] focus:border-transparent"
             />
           </div>
 
           <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
-            <input 
-              type="checkbox" id="subscribe" name="subscribe" 
-              checked={formData.subscribe} onChange={handleChange}
+            <input
+              type="checkbox"
+              id="subscribe"
+              name="subscribe"
+              checked={formData.subscribe}
+              onChange={handleChange}
               className="mt-1 h-4 w-4 rounded border-gray-300 text-[#0685B1] focus:ring-[#0685B1]"
             />
             <label htmlFor="subscribe">
@@ -298,8 +316,9 @@ const PestControlForm = () => {
           </div>
 
           <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
-            <input 
-              type="checkbox" id='subscribe2'
+            <input
+              type="checkbox"
+              id="subscribe2"
               className="mt-1 h-4 w-4 rounded border-gray-300 text-[#0685B1] focus:ring-[#0685B1]"
             />
             <label htmlFor="subscribe2">
@@ -308,10 +327,12 @@ const PestControlForm = () => {
           </div>
 
           <div className="pt-4">
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isSubmitting}
-              className={`w-full bg-[#0685B1] hover:bg-[#056a8c] text-white font-bold py-4 rounded transition-colors text-xl ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+              className={`w-full bg-[#0685B1] hover:bg-[#056a8c] text-white font-bold py-4 rounded transition-colors text-xl ${
+                isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
             >
               {isSubmitting ? 'Submitting...' : 'Submit'}
             </button>
@@ -319,14 +340,18 @@ const PestControlForm = () => {
         </form>
 
         {status.message && (
-          <div className={`mt-4 text-center font-medium ${status.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+          <div
+            className={`mt-4 text-center font-medium ${
+              status.type === 'success' ? 'text-green-600' : 'text-red-600'
+            }`}
+          >
             {status.message}
           </div>
         )}
       </main>
 
       <noscript>
-        <img src='https://api.trustedform.com/ns.gif' alt="trustedform" />
+        <img src="https://api.trustedform.com/ns.gif" alt="trustedform" />
       </noscript>
     </div>
   );

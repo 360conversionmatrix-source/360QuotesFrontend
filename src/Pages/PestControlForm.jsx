@@ -3,6 +3,16 @@ import { Link } from 'react-router-dom';
 import Navbar from '../Components/common/Navbar';
 import DisclaimerMarquee from '../Components/common/DisclaimerMarquee';
 
+// Helper function to generate a random GCLID matching real Google format
+const generateRandomGclid = () => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  let randomString = '';
+  for (let i = 0; i < 40; i++) {
+    randomString += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `CjwKCAi${randomString}`;
+};
+
 const PestControlForm = () => {
   const [formData, setFormData] = useState({
     first_name: '',
@@ -14,14 +24,14 @@ const PestControlForm = () => {
     phone: '',
     email: '',
     subscribe: false,
-    smid: '',  // State to hold the captured or generated SMID
-    gclid: '', // State to hold the Google Click ID
+    smid: '',
+    gclid: '', // Holds the GCLID
   });
 
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // TrustedForm, SMID, & GCLID Integration
+  // TrustedForm, SMID, & Random GCLID Generation Integration
   useEffect(() => {
     // 1. TrustedForm Script Integration
     const script = document.createElement('script');
@@ -31,7 +41,7 @@ const PestControlForm = () => {
     const s = document.getElementsByTagName('script')[0];
     if (s) s.parentNode.insertBefore(script, s);
 
-    // 2. Query Params: Capture or Create SMID & GCLID
+    // 2. Query Params: Capture SMID & Random GCLID
     const urlParams = new URLSearchParams(window.location.search);
     
     // --- SMID Logic ---
@@ -40,28 +50,23 @@ const PestControlForm = () => {
       smidValue = 'RAND-' + Math.random().toString(36).substring(2, 11).toUpperCase();
     }
 
-    // --- GCLID Logic ---
+    // --- GCLID Logic: Always generate randomly if not in URL ---
     let gclidValue = urlParams.get("gclid");
 
     if (!gclidValue) {
-      // Check if one was already saved during this session
-      gclidValue = sessionStorage.getItem("gclid");
+      // Generate a new random GCLID
+      gclidValue = generateRandomGclid();
 
-      // If still missing, generate a test GCLID
-      if (!gclidValue) {
-        gclidValue = 'TEST_GCLID-' + Math.random().toString(36).substring(2, 12).toUpperCase();
-      }
-
-      // Append gclid to URL address bar dynamically without page reload
+      // Immediately append ?gclid=... to the browser address bar without reloading
       urlParams.set("gclid", gclidValue);
       const newUrl = `${window.location.pathname}?${urlParams.toString()}`;
       window.history.replaceState({ path: newUrl }, '', newUrl);
     }
 
-    // Save to sessionStorage for cross-navigation retention
+    // Keep in sessionStorage
     sessionStorage.setItem("gclid", gclidValue);
 
-    // Save values into React state
+    // Update state
     setFormData(prev => ({ 
       ...prev, 
       smid: smidValue,
@@ -105,7 +110,7 @@ const PestControlForm = () => {
       if (response.ok) {
         setStatus({ type: 'success', message: 'Form submitted successfully!' });
         
-        // Reset form inputs (retains smid and gclid)
+        // Reset form inputs
         setFormData(prev => ({
           ...prev,
           first_name: '', 
@@ -162,10 +167,8 @@ const PestControlForm = () => {
           className="w-full h-[300px] sm:h-[600px] object-cover object-top rounded-lg shadow-md z-0"
         />
 
-        {/* Dark overlay */}
         <div className="absolute inset-0 bg-black opacity-50 z-2"></div>
 
-        {/* Text content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
           <h1 className="text-3xl pt-32 md:pt-7 md:text-7xl font-bold text-white">Pest Control</h1>
           <h1 className="sm:mt-4 text-xl sm:text-3xl text-white">
@@ -283,7 +286,6 @@ const PestControlForm = () => {
             />
           </div>
 
-          {/* Compliance Text */}
           <div className="flex items-start gap-3 mt-6 text-xs text-gray-500 leading-relaxed">
             <input 
               type="checkbox" id="subscribe" name="subscribe" 

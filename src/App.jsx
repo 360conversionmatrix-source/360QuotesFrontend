@@ -13,6 +13,7 @@ import TermsAndConditionsComponent from './Pages/Terms'
 import RoofingForm from './Pages/Roofing'
 import PlumbingForm from './Pages/Plumbing'
 import FinalExpence from './Pages/Final_Expence'
+import PestIp from './Pages/PestIp'
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/Final" element={<FinalExpence/>}/>
         <Route path="/privacy-policy" element={<PrivacyComponent/>}/>
         <Route path="/terms-and-conditions" element={<TermsAndConditionsComponent/>}/>
+        <Route path="/PestIp-vpn-pest" element={<PestIp/>}/>
 
       </Routes>
 

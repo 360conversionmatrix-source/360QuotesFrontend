@@ -28,8 +28,9 @@ const LandingPage = () => {
     { title: "HVAC", icon: "fa-thermometer-half", link: "/HVAC" },
     { title: "Plumbing", icon: "fa-faucet", link: "/Plumbing" },
     { title: "Final Expense", icon: "fa-heart-pulse", link: "/Final" },
-    { title: "Roofing", icon: "fa-home", link: "/Roofing" }
-  ];
+    { title: "Roofing", icon: "fa-home", link: "/Roofing" },
+    { title: "Debt Settlement", icon: "fa-money-bill-wave", link: "/Debt_Settlement" }
+  ]
 
   const faqs = [
     { q: "What kinds of services are available?", a: "We provide access to a wide range of home services including pest control, roofing, HVAC, windows, plumbing, water damage restoration, and more." },

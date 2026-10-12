@@ -29,7 +29,8 @@ const LandingPage = () => {
     { title: "Plumbing", icon: "fa-faucet", link: "/Plumbing" },
     { title: "Final Expense", icon: "fa-heart-pulse", link: "/Final" },
     { title: "Roofing", icon: "fa-home", link: "/Roofing" },
-    { title: "Debt Settlement", icon: "fa-money-bill-wave", link: "/Debt_Settlement" }
+    { title: "Debt Settlement", icon: "fa-money-bill-wave", link: "/Debt_Settlement" },
+    { title: "Water Damage", icon: "fa-tint", link: "/Water" }
   ]
 
   const faqs = [
